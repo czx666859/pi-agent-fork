@@ -1,0 +1,54 @@
+flowchart BT
+    %% 箭头方向：使用方 --> 被依赖方
+
+    subgraph L0["Layer 0：基础独立模块（零内部依赖）"]
+        telemetry["telemetry<br/>(@earendil-works/pi-telemetry)"]
+        schema["schema<br/>(@earendil-works/pi-schema)"]
+        tui["tui<br/>(@earendil-works/pi-tui)"]
+        codemode["codemode<br/>(@earendil-works/pi-codemode)"]
+        mcp["mcp<br/>(@earendil-works/pi-mcp)"]
+    end
+
+    subgraph L1["Layer 1：对象运行时与统一 LLM API 层"]
+        chord["chord<br/>(@earendil-works/chord)"]
+        ai["ai<br/>(@earendil-works/pi-ai)"]
+    end
+
+    subgraph L2["Layer 2：Agent 核心与持久化运行时层"]
+        agent["agent<br/>(@earendil-works/pi-agent-core)"]
+        durable["durable<br/>(@earendil-works/pi-durable)"]
+    end
+
+    subgraph L3["Layer 3：顶层应用与远程执行环境层"]
+        env["env<br/>(@earendil-works/pi-env)"]
+        coding_agent["coding-agent<br/>(@earendil-works/pi-coding-agent)"]
+    end
+
+    %% Layer 1 依赖
+    chord --> schema
+    chord --> telemetry
+    ai --> schema
+    ai --> telemetry
+
+    %% Layer 2 依赖
+    agent --> ai
+    agent --> schema
+    durable --> chord
+    durable --> ai
+    durable --> codemode
+    durable --> schema
+    durable --> telemetry
+
+    %% Layer 3 依赖
+    env --> durable
+    env --> chord
+    coding_agent --> agent
+    coding_agent --> ai
+    coding_agent --> tui
+    coding_agent --> codemode
+    coding_agent --> mcp
+
+    %% 未纳入根 build 的开发/测试模块（虚线区分 devDependencies）
+    evals["evals（未纳入根 build）<br/>(@earendil-works/pi-evals)"]
+    evals -. "devDependency" .-> coding_agent
+    evals -. "devDependency" .-> ai
