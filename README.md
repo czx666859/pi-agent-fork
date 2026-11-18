@@ -5,7 +5,6 @@
 - **小组仓库地址**：https://github.com/Wolf-F4/pi-hunnu-2026
 - **实际 Clone 地址**：`https://github.com/Wolf-F4/pi-hunnu-2026.git`
 - **本地检出提交编号（HEAD）**：`c3cc91632d0a1950fb122605b190233f2aa0006e`
-- **本人重点分析的模块**：[待填写：例如 `ai`、`agent`、`coding-agent`]
 
 ---
 
